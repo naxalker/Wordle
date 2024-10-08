@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -6,15 +7,6 @@ using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
-    private static readonly KeyCode[] SUPPORTED_KEYS = new KeyCode[]
-    {
-        KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E, KeyCode.F, 
-        KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L, 
-        KeyCode.M, KeyCode.N, KeyCode.O, KeyCode.P, KeyCode.Q, KeyCode.R, 
-        KeyCode.S, KeyCode.T, KeyCode.U, KeyCode.V, KeyCode.W, KeyCode.X, 
-        KeyCode.Y, KeyCode.Z
-    };
-
     [Header("States")]
     [SerializeField] private Tile.TileState _emptyState;
     [SerializeField] private Tile.TileState _occupiedState;
@@ -62,47 +54,49 @@ public class Board : MonoBehaviour
         NewGame();
     }
 
-    private void Update()
+    public void PlaceLetter(char letter)
     {
         Row currentRow = _rows[_rowIndex];
 
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            _columnIndex = Mathf.Max(_columnIndex - 1, 0);
-            currentRow.Tiles[_columnIndex].SetLetter('\0');
-            currentRow.Tiles[_columnIndex].SetState(_emptyState);
+        if (_columnIndex >= currentRow.Tiles.Length)
+            return;
 
-            _invalidWordText.gameObject.SetActive(false);
-        }
-        else if (_columnIndex >= currentRow.Tiles.Length)
+        currentRow.Tiles[_columnIndex].SetLetter(letter);
+        currentRow.Tiles[_columnIndex].SetState(_occupiedState);
+        _columnIndex++;
+    }
+
+    public void SubmitWord()
+    {
+        Row currentRow = _rows[_rowIndex];
+
+        if (_columnIndex >= currentRow.Tiles.Length)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                SubmitRow(currentRow);
-            }
+            SubmitRow(currentRow);
         }
-        else
-        {
-            for (int i = 0; i < SUPPORTED_KEYS.Length; i++)
-            {
-                if (Input.GetKeyDown(SUPPORTED_KEYS[i]))
-                {
-                    currentRow.Tiles[_columnIndex].SetLetter((char)SUPPORTED_KEYS[i]);
-                    currentRow.Tiles[_columnIndex].SetState(_occupiedState);
-                    _columnIndex++;
-                    break;
-                }
-            }
-        }
+    }
+
+    public void RemoveLetter()
+    {
+        Row currentRow = _rows[_rowIndex];
+
+        _columnIndex = Mathf.Max(_columnIndex - 1, 0);
+        currentRow.Tiles[_columnIndex].SetLetter('\0');
+        currentRow.Tiles[_columnIndex].SetState(_emptyState);
+
+        _invalidWordText.gameObject.SetActive(false);
     }
 
     private void LoadData()
     {
-        TextAsset textFile = Resources.Load("official_wordle_all") as TextAsset;
-        _validWords = textFile.text.Split('\n');
+        TextAsset textFile = Resources.Load("words") as TextAsset;
 
-        textFile = Resources.Load("official_wordle_common") as TextAsset;
-        _solutions = textFile.text.Split('\n');
+        _validWords = textFile.text
+            .Split('\n')
+            .Select(word => word.Trim())
+            .ToArray();
+
+        _solutions = _validWords.Take(1000).ToArray();
     }
 
     private void SetRandomWord()

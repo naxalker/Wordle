@@ -15,7 +15,7 @@ public class Row : MonoBehaviour
                 word += Tiles[i].Letter;
             }
 
-            return word;
+            return word.ToLower();
         }
     }
 
