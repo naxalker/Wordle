@@ -1,23 +1,20 @@
 using System;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Zenject;
 using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
+    public event Action OnInvalidWord;
+    public event Action<bool> OnGameOver;
+
     [Header("States")]
     [SerializeField] private Tile.TileState _emptyState;
     [SerializeField] private Tile.TileState _occupiedState;
     [SerializeField] private Tile.TileState _correctState;
     [SerializeField] private Tile.TileState _wrongSpotState;
     [SerializeField] private Tile.TileState _incorrectState;
-
-    [Header("UI")]
-    [SerializeField] private TMP_Text _invalidWordText;
-    [SerializeField] private Button _tryAgainButton;
-    [SerializeField] private Button _newWordButton;
 
     private Row[] _rows;
 
@@ -28,30 +25,41 @@ public class Board : MonoBehaviour
     private int _rowIndex;
     private int _columnIndex;
 
+    private PlayerInput _playerInput;
+
+    [Inject]
+    private void Construct(PlayerInput playerInput)
+    {
+        _playerInput = playerInput;
+    }
+
     private void Awake()
     {
         _rows = GetComponentsInChildren<Row>();
-
-        _tryAgainButton.onClick.AddListener(() => TryAgain());
-        _newWordButton.onClick.AddListener(() => NewGame());
-    }
-
-    private void OnEnable()
-    {
-        _tryAgainButton.gameObject.SetActive(false);
-        _newWordButton.gameObject.SetActive(false);
-    }
-
-    private void OnDisable()
-    {
-        _tryAgainButton.gameObject.SetActive(true);
-        _newWordButton.gameObject.SetActive(true);
     }
 
     private void Start()
     {
         LoadData();
-        NewGame();
+        StartNewGame();
+    }
+
+    private void OnEnable()
+    {
+        _playerInput.OnKeyPressed += KeyPressedHandler;
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.OnKeyPressed -= KeyPressedHandler;
+    }
+
+    public void StartNewGame()
+    {
+        ClearBoard();
+        SetRandomWord();
+
+        enabled = true;
     }
 
     public void PlaceLetter(char letter)
@@ -83,8 +91,6 @@ public class Board : MonoBehaviour
         _columnIndex = Mathf.Max(_columnIndex - 1, 0);
         currentRow.Tiles[_columnIndex].SetLetter('\0');
         currentRow.Tiles[_columnIndex].SetState(_emptyState);
-
-        _invalidWordText.gameObject.SetActive(false);
     }
 
     private void LoadData()
@@ -109,7 +115,7 @@ public class Board : MonoBehaviour
     {
         if (!IsValidWord(row.Word))
         {
-            _invalidWordText.gameObject.SetActive(true);
+            OnInvalidWord?.Invoke();
             return;
         }
 
@@ -155,6 +161,7 @@ public class Board : MonoBehaviour
 
         if (HasWon(row))
         {
+            OnGameOver?.Invoke(true);
             enabled = false;
         }
 
@@ -163,22 +170,9 @@ public class Board : MonoBehaviour
 
         if (_rowIndex >= _rows.Length)
         {
+            OnGameOver?.Invoke(false);
             enabled = false;
         }
-    }
-
-    private void NewGame()
-    {
-        ClearBoard();
-        SetRandomWord();
-
-        enabled = true;
-    }
-
-    private void TryAgain()
-    {
-        ClearBoard();
-        enabled = true;
     }
 
     private void ClearBoard()
@@ -194,6 +188,22 @@ public class Board : MonoBehaviour
 
         _rowIndex = 0;
         _columnIndex = 0;
+    }
+
+    private void KeyPressedHandler(KeyCode keyCode)
+    {
+        if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
+        {
+            PlaceLetter(PlayerInput.ENGLISH_TO_RUSSIAN_MAP[keyCode]);
+        }
+        else if (keyCode == KeyCode.Return)
+        {
+            SubmitWord();
+        }
+        else if (keyCode == KeyCode.Backspace)
+        {
+            RemoveLetter();
+        }
     }
 
     private bool IsValidWord(string word) => _validWords.Contains(word);
