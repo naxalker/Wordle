@@ -12,13 +12,6 @@ public class Board : MonoBehaviour
     public event Action OnInvalidWord;
     public event Action<bool, string> OnGameOver;
 
-    [Header("States")]
-    [SerializeField] private Tile.TileState _emptyState;
-    [SerializeField] private Tile.TileState _occupiedState;
-    [SerializeField] private Tile.TileState _correctState;
-    [SerializeField] private Tile.TileState _wrongSpotState;
-    [SerializeField] private Tile.TileState _incorrectState;
-
     private Row[] _rows;
 
     private string _word;
@@ -80,7 +73,7 @@ public class Board : MonoBehaviour
             return;
 
         currentRow.Tiles[_columnIndex].SetLetter(letter);
-        currentRow.Tiles[_columnIndex].SetState(_occupiedState);
+        currentRow.Tiles[_columnIndex].SetState(TileState.OccupiedState);
         _columnIndex++;
     }
 
@@ -106,7 +99,7 @@ public class Board : MonoBehaviour
 
         _columnIndex = Mathf.Max(_columnIndex - 1, 0);
         currentRow.Tiles[_columnIndex].SetLetter('\0');
-        currentRow.Tiles[_columnIndex].SetState(_emptyState);
+        currentRow.Tiles[_columnIndex].SetState(TileState.EmptyState);
 
         OnLetterRemoved?.Invoke();
     }
@@ -133,14 +126,14 @@ public class Board : MonoBehaviour
 
             if (tile.Letter == _word[i])
             {
-                tile.SetState(_correctState);
+                tile.SetState(TileState.CorrectState);
 
                 remaining = remaining.Remove(i, 1);
                 remaining = remaining.Insert(i, " ");
             }
             else if (!_word.Contains(tile.Letter))
             {
-                tile.SetState(_incorrectState);
+                tile.SetState(TileState.IncorrectState);
             }
         }
 
@@ -148,11 +141,11 @@ public class Board : MonoBehaviour
         {
             Tile tile = row.Tiles[i];
 
-            if (tile.State != _correctState && tile.State != _incorrectState)
+            if (tile.State != TileState.CorrectState && tile.State != TileState.IncorrectState)
             {
                 if (remaining.Contains(tile.Letter))
                 {
-                    tile.SetState(_wrongSpotState);
+                    tile.SetState(TileState.WrongSpotState);
 
                     int index = remaining.IndexOf(tile.Letter);
                     remaining = remaining.Remove(index, 1);
@@ -160,7 +153,7 @@ public class Board : MonoBehaviour
                 }
                 else
                 {
-                    tile.SetState(_incorrectState);
+                    tile.SetState(TileState.IncorrectState);
                 }
             }
         }
@@ -188,7 +181,7 @@ public class Board : MonoBehaviour
             for (int col = 0; col < _rows[row].Tiles.Length; col++)
             {
                 _rows[row].Tiles[col].SetLetter('\0');
-                _rows[row].Tiles[col].SetState(_emptyState);
+                _rows[row].Tiles[col].SetState(TileState.EmptyState);
             }
         }
 
@@ -214,5 +207,5 @@ public class Board : MonoBehaviour
 
     private bool IsValidWord(string word) => ValidWords.Contains(word);
 
-    private bool HasWon(Row row) => row.Tiles.All(tile => tile.State == _correctState);
+    private bool HasWon(Row row) => row.Tiles.All(tile => tile.State == TileState.CorrectState);
 }

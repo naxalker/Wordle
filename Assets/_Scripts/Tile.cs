@@ -1,16 +1,13 @@
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class Tile : MonoBehaviour
 {
-    [Serializable]
-    public class TileState
-    {
-        public Color FillColor;
-        public Color OutlineColor;
-    }
+    public static event Action<Tile> OnTileChangedState;
 
     public char Letter { get; private set; }
     public TileState State { get; private set; }
@@ -18,6 +15,14 @@ public class Tile : MonoBehaviour
     private TMP_Text _text;
     private Image _fill;
     private Outline _outline;
+
+    private TileColorsSO _tileColors;
+
+    [Inject]
+    private void Construct(TileColorsSO tileColors)
+    {
+        _tileColors = tileColors;
+    }
 
     private void Awake()
     {
@@ -35,7 +40,11 @@ public class Tile : MonoBehaviour
     public void SetState(TileState state)
     {
         State = state;
-        _fill.color = state.FillColor;
-        _outline.effectColor = state.OutlineColor;
+
+        TileColorConfig tileConfig = _tileColors.Values.FirstOrDefault(tile => tile.TileState == state);
+        _fill.color = tileConfig.FillColor;
+        _outline.effectColor = tileConfig.OutlineColor;
+
+        OnTileChangedState?.Invoke(this);
     }
 }

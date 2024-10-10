@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class PlayerInput : IInitializable, ITickable
+public class PlayerInput : IInitializable, ITickable, IDisposable
 {
     public static readonly Dictionary<KeyCode, char> ENGLISH_TO_RUSSIAN_MAP = new Dictionary<KeyCode, char>()
     {
@@ -36,6 +37,9 @@ public class PlayerInput : IInitializable, ITickable
     private Button _clearButton;
     private Button _submitButton;
 
+    private Color _defaultButtonColor;
+    private Dictionary<char, Button> _letterToButton = new Dictionary<char, Button>();
+
     public PlayerInput(Board board, Button[] letterButtons, Button clearButton, Button submitButton)
     {
         _board = board;
@@ -46,14 +50,23 @@ public class PlayerInput : IInitializable, ITickable
 
     public void Initialize()
     {
+        _defaultButtonColor = _letterButtons[0].GetComponent<Image>().color;
+
         foreach (Button button in _letterButtons)
         {
-            button.onClick.AddListener(() =>
-                _board.PlaceLetter(button.GetComponentInChildren<TMP_Text>().text[0]));
+            char letter = button.GetComponentInChildren<TMP_Text>().text[0];
+            _letterToButton[letter] = button;
+            button.onClick.AddListener(() => _board.PlaceLetter(letter));
         }
 
         _clearButton.onClick.AddListener(() => _board.RemoveLetter());
         _submitButton.onClick.AddListener(() => _board.SubmitWord());
+        Tile.OnTileChangedState += TileChangedStateHandler;
+    }
+
+    public void Dispose()
+    {
+        Tile.OnTileChangedState -= TileChangedStateHandler;
     }
 
     public void Tick()
@@ -64,6 +77,17 @@ public class PlayerInput : IInitializable, ITickable
             {
                 OnKeyPressed?.Invoke(keyCode);
             }
+        }
+    }
+
+    private void TileChangedStateHandler(Tile tile)
+    {
+        if (tile.State == TileState.CorrectState || tile.State == TileState.WrongSpotState || tile.State == TileState.IncorrectState)
+        {
+            Button letterButton = _letterToButton[tile.Letter];
+
+            if (letterButton.GetComponent<Image>().color == _defaultButtonColor)
+                letterButton.GetComponent<Image>().color = tile.GetComponent<Image>().color;
         }
     }
 }

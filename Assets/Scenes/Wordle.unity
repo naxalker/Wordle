@@ -1689,7 +1689,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98faa14cd2b39243baeaccf3696feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _progressText: {fileID: 0}
+  _progressText: {fileID: 730286662}
+  _board: {fileID: 1560146682}
 --- !u!1 &586998018
 GameObject:
   m_ObjectHideFlags: 0
@@ -2621,6 +2622,7 @@ GameObject:
   - component: {fileID: 868104643}
   - component: {fileID: 868104642}
   - component: {fileID: 868104645}
+  - component: {fileID: 868104646}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -2692,6 +2694,7 @@ MonoBehaviour:
   _monoInstallers:
   - {fileID: 868104642}
   - {fileID: 868104645}
+  - {fileID: 868104646}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2737,6 +2740,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _board: {fileID: 1560146682}
+--- !u!114 &868104646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868104641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c721af900fc4ce84393bf642b5d6792a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tileColors: {fileID: 11400000, guid: 5e8402415c090674890b0d17bfe5e0d3, type: 2}
 --- !u!1001 &919603676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5250,21 +5266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d611fcd0de47cc4aa1aefd09c5abf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _emptyState:
-    FillColor: {r: 0.1137255, g: 0.1137255, b: 0.1137255, a: 1}
-    OutlineColor: {r: 0.22745098, g: 0.22745098, b: 0.23529412, a: 1}
-  _occupiedState:
-    FillColor: {r: 0.1137255, g: 0.1137255, b: 0.1137255, a: 1}
-    OutlineColor: {r: 0.3372549, g: 0.34117648, b: 0.34509805, a: 1}
-  _correctState:
-    FillColor: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
-    OutlineColor: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
-  _wrongSpotState:
-    FillColor: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
-    OutlineColor: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
-  _incorrectState:
-    FillColor: {r: 0.22745098, g: 0.22745098, b: 0.23529412, a: 1}
-    OutlineColor: {r: 0.22745098, g: 0.22745098, b: 0.23529412, a: 1}
 --- !u!114 &1560146683
 MonoBehaviour:
   m_ObjectHideFlags: 0
