@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -6,8 +7,10 @@ using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
+    public event Action OnNewGameStarted;
+    public event Action OnLetterRemoved;
     public event Action OnInvalidWord;
-    public event Action<bool> OnGameOver;
+    public event Action<bool, string> OnGameOver;
 
     [Header("States")]
     [SerializeField] private Tile.TileState _emptyState;
@@ -18,20 +21,23 @@ public class Board : MonoBehaviour
 
     private Row[] _rows;
 
-    private string[] _solutions;
-    private string[] _validWords;
     private string _word;
 
     private int _rowIndex;
     private int _columnIndex;
 
     private PlayerInput _playerInput;
+    private PlayerProgressController _playerProgress;
 
     [Inject]
-    private void Construct(PlayerInput playerInput)
+    private void Construct(PlayerInput playerInput, PlayerProgressController playerProgress)
     {
         _playerInput = playerInput;
+        _playerProgress = playerProgress;
     }
+
+    private List<string> UnguessedWords => _playerProgress.UnguessedWords;
+    private string[] ValidWords => _playerProgress.ValidWords;
 
     private void Awake()
     {
@@ -40,7 +46,6 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
-        LoadData();
         StartNewGame();
     }
 
@@ -60,10 +65,15 @@ public class Board : MonoBehaviour
         SetRandomWord();
 
         enabled = true;
+
+        OnNewGameStarted?.Invoke();
     }
 
     public void PlaceLetter(char letter)
     {
+        if (!enabled)
+            return;
+
         Row currentRow = _rows[_rowIndex];
 
         if (_columnIndex >= currentRow.Tiles.Length)
@@ -76,6 +86,9 @@ public class Board : MonoBehaviour
 
     public void SubmitWord()
     {
+        if (!enabled)
+            return;
+
         Row currentRow = _rows[_rowIndex];
 
         if (_columnIndex >= currentRow.Tiles.Length)
@@ -86,28 +99,21 @@ public class Board : MonoBehaviour
 
     public void RemoveLetter()
     {
+        if (!enabled)
+            return;
+
         Row currentRow = _rows[_rowIndex];
 
         _columnIndex = Mathf.Max(_columnIndex - 1, 0);
         currentRow.Tiles[_columnIndex].SetLetter('\0');
         currentRow.Tiles[_columnIndex].SetState(_emptyState);
-    }
 
-    private void LoadData()
-    {
-        TextAsset textFile = Resources.Load("words") as TextAsset;
-
-        _validWords = textFile.text
-            .Split('\n')
-            .Select(word => word.Trim())
-            .ToArray();
-
-        _solutions = _validWords.Take(1000).ToArray();
+        OnLetterRemoved?.Invoke();
     }
 
     private void SetRandomWord()
     {
-        _word = _solutions[Random.Range(0, _solutions.Length)];
+        _word = UnguessedWords[Random.Range(0, UnguessedWords.Count)];
         _word = _word.ToLower().Trim();
     }
 
@@ -161,7 +167,7 @@ public class Board : MonoBehaviour
 
         if (HasWon(row))
         {
-            OnGameOver?.Invoke(true);
+            OnGameOver?.Invoke(true, row.Word);
             enabled = false;
         }
 
@@ -170,7 +176,7 @@ public class Board : MonoBehaviour
 
         if (_rowIndex >= _rows.Length)
         {
-            OnGameOver?.Invoke(false);
+            OnGameOver?.Invoke(false, row.Word);
             enabled = false;
         }
     }
@@ -206,7 +212,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private bool IsValidWord(string word) => _validWords.Contains(word);
+    private bool IsValidWord(string word) => ValidWords.Contains(word);
 
     private bool HasWon(Row row) => row.Tiles.All(tile => tile.State == _correctState);
 }

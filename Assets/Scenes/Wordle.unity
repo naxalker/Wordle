@@ -1648,6 +1648,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 577189038}
+  - component: {fileID: 577189039}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -1676,6 +1677,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -282.5}
   m_SizeDelta: {x: 1182, y: 178.99997}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &577189039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577189037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98faa14cd2b39243baeaccf3696feac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _progressText: {fileID: 0}
 --- !u!1 &586998018
 GameObject:
   m_ObjectHideFlags: 0
@@ -2606,6 +2620,7 @@ GameObject:
   - component: {fileID: 868104644}
   - component: {fileID: 868104643}
   - component: {fileID: 868104642}
+  - component: {fileID: 868104645}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -2674,7 +2689,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 868104642}
+  - {fileID: 868104645}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2707,6 +2724,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &868104645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868104641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21102d667a8533047863805fc6c7914c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _board: {fileID: 1560146682}
 --- !u!1001 &919603676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3647,7 +3677,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1372452995}
   - component: {fileID: 1372452997}
-  - component: {fileID: 1372452996}
   m_Layer: 5
   m_Name: Keyboard
   m_TagString: Untagged
@@ -3677,54 +3706,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 369.00098}
   m_SizeDelta: {x: 1182, y: 458}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1372452996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372452994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 269906aac2041f5459ee85b713caae80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _board: {fileID: 1560146682}
-  _letterButtons:
-  - {fileID: 342121621}
-  - {fileID: 973809040}
-  - {fileID: 1547022399}
-  - {fileID: 1415468133}
-  - {fileID: 2138711909}
-  - {fileID: 481255157}
-  - {fileID: 1645043146}
-  - {fileID: 856884110}
-  - {fileID: 1125385291}
-  - {fileID: 1376095035}
-  - {fileID: 1630932771}
-  - {fileID: 1492451425}
-  - {fileID: 1483291943}
-  - {fileID: 507881640}
-  - {fileID: 1829408288}
-  - {fileID: 1921929807}
-  - {fileID: 416007225}
-  - {fileID: 1879078816}
-  - {fileID: 328302941}
-  - {fileID: 624550603}
-  - {fileID: 1494628009}
-  - {fileID: 1527193251}
-  - {fileID: 919603678}
-  - {fileID: 714408152}
-  - {fileID: 1541856158}
-  - {fileID: 2126747796}
-  - {fileID: 1814192021}
-  - {fileID: 2123489910}
-  - {fileID: 627055644}
-  - {fileID: 1144703278}
-  - {fileID: 2000462760}
-  - {fileID: 229298180}
-  _clearButton: {fileID: 1421155538}
-  _submitButton: {fileID: 256761562}
 --- !u!114 &1372452997
 MonoBehaviour:
   m_ObjectHideFlags: 0
