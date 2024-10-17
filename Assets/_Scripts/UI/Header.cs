@@ -17,7 +17,7 @@ public class Header : MonoBehaviour
 
     private void Start()
     {
-        _progressText.text = $"Уровень\n{_playerProgress.GuessedWordsAmount + 1}/1000";
+        _progressText.text = $"Слов отгадано\n{_playerProgress.GuessedWordsAmount + 1}/1000";
 
         _board.OnNewGameStarted += NewGameStartedHandler;
     }
@@ -29,6 +29,6 @@ public class Header : MonoBehaviour
 
     private void NewGameStartedHandler()
     {
-        _progressText.text = $"Уровень\n{_playerProgress.GuessedWordsAmount + 1}/1000";
+        _progressText.text = $"Слов отгадано\n{_playerProgress.GuessedWordsAmount + 1}/1000";
     }
 }

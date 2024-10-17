@@ -5,6 +5,8 @@ public class AudioController : MonoBehaviour
     [SerializeField] private SoundEffectsSO _soundEffects;
     [SerializeField] private Board _board;
 
+    [SerializeField] private AudioClip _clip;
+
     private AudioSource _audioSource;
 
     private void Awake()
@@ -17,6 +19,14 @@ public class AudioController : MonoBehaviour
     private void OnDestroy()
     {
         _board.OnLetterPlaced -= LetterPlacedHandler;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.CapsLock))
+        {
+            PlayClip(_clip);
+        }
     }
 
     private void LetterPlacedHandler() => PlayClip(_soundEffects.ClickSound);

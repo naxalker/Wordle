@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe14cf3670e3c1428e9885261534f2c, type: 3}
   m_Name: Sound Effects
   m_EditorClassIdentifier: 
-  <ClickSound>k__BackingField: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
+  <ClickSound>k__BackingField: {fileID: 8300000, guid: 95be61cee3cf3c7429ac138703db3b9f, type: 3}

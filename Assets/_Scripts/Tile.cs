@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
     public static event Action<Tile> OnTileChangedState;
 
     private const float TIME_TO_FLIP = .5f;
+    private const float TIME_TO_SCALE = .15f;
 
     public char Letter { get; private set; }
     public TileState State { get; private set; }
@@ -46,6 +47,9 @@ public class Tile : MonoBehaviour
     {
         Letter = letter;
         _text.text = letter.ToString();
+
+        if (letter != '\0') 
+            _rectTransform.DOScale(Vector3.one * 1.05f, TIME_TO_SCALE).SetEase(Ease.InOutQuad).SetLoops(2, LoopType.Yoyo);
     }
 
     public void SetState(TileState state)

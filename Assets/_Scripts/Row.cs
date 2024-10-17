@@ -5,6 +5,8 @@ public class Row : MonoBehaviour
 {
     public Tile[] Tiles { get; private set; }
 
+    private RectTransform _rectTransform;
+
     public string Word
     {
         get
@@ -23,10 +25,14 @@ public class Row : MonoBehaviour
     private void Awake()
     {
         Tiles = GetComponentsInChildren<Tile>();
+        _rectTransform = GetComponent<RectTransform>();
     }
 
     public void Shake()
     {
-        GetComponent<RectTransform>().DOShakePosition(.3f, new Vector3(20f, 0f, 0f), randomness: 0f, randomnessMode: ShakeRandomnessMode.Harmonic);
+        if (DOTween.IsTweening(_rectTransform))
+            return;
+
+        _rectTransform.DOShakePosition(.3f, new Vector3(20f, 0f, 0f), randomness: 0f, randomnessMode: ShakeRandomnessMode.Harmonic);
     }
 }
