@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +30,7 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
     };
 
     public event Action<KeyCode> OnKeyPressed;
+    public event Action OnButtonPressed;
 
     private Board _board;
     private Button[] _letterButtons;
@@ -56,7 +56,11 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
         {
             char letter = button.GetComponentInChildren<TMP_Text>().text[0];
             _letterToButton[letter] = button;
-            button.onClick.AddListener(() => _board.PlaceLetter(letter));
+            button.onClick.AddListener(() =>
+            {
+                _board.PlaceLetter(letter);
+                OnButtonPressed?.Invoke();
+            });
         }
 
         _clearButton.onClick.AddListener(() => _board.RemoveLetter());
@@ -71,7 +75,7 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
 
     public void Tick()
     {
-        foreach(KeyCode keyCode in SUPPORTED_KEYS)
+        foreach (KeyCode keyCode in SUPPORTED_KEYS)
         {
             if (Input.GetKeyDown(keyCode))
             {
@@ -87,7 +91,7 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
             Button letterButton = _letterToButton[tile.Letter];
 
             if (letterButton.GetComponent<Image>().color == _defaultButtonColor)
-                letterButton.GetComponent<Image>().color = tile.GetComponent<Image>().color;
+                letterButton.GetComponent<Image>().color = tile.FillColor;
         }
     }
 }

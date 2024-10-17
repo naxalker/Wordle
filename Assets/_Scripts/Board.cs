@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,7 @@ using Random = UnityEngine.Random;
 public class Board : MonoBehaviour
 {
     public event Action OnNewGameStarted;
+    public event Action OnLetterPlaced;
     public event Action OnLetterRemoved;
     public event Action OnInvalidWord;
     public event Action<bool, string> OnGameOver;
@@ -75,6 +77,8 @@ public class Board : MonoBehaviour
         currentRow.Tiles[_columnIndex].SetLetter(letter);
         currentRow.Tiles[_columnIndex].SetState(TileState.OccupiedState);
         _columnIndex++;
+
+        OnLetterPlaced?.Invoke();
     }
 
     public void SubmitWord()
@@ -86,7 +90,7 @@ public class Board : MonoBehaviour
 
         if (_columnIndex >= currentRow.Tiles.Length)
         {
-            SubmitRow(currentRow);
+            StartCoroutine(SubmitRow(currentRow));
         }
     }
 
@@ -110,12 +114,14 @@ public class Board : MonoBehaviour
         _word = _word.ToLower().Trim();
     }
 
-    private void SubmitRow(Row row)
+    private IEnumerator SubmitRow(Row row)
     {
         if (!IsValidWord(row.Word))
         {
+            row.Shake();
+
             OnInvalidWord?.Invoke();
-            return;
+            yield break;
         }
 
         string remaining = _word;
@@ -156,6 +162,11 @@ public class Board : MonoBehaviour
                     tile.SetState(TileState.IncorrectState);
                 }
             }
+        }
+
+        foreach(Tile tile in row.Tiles)
+        {
+            yield return StartCoroutine(tile.Flip());
         }
 
         if (HasWon(row))
