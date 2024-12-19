@@ -17,9 +17,10 @@ public class Tile : MonoBehaviour
     public char Letter { get; private set; }
     public TileState State { get; private set; }
 
+    [SerializeField] private Image _outline;
     private TMP_Text _text;
     private Image _fill;
-    private Outline _outline;
+    private ThemeableObject _themeableObject;
 
     private TileColorsSO _tileColors;
     private RectTransform _rectTransform;
@@ -40,7 +41,7 @@ public class Tile : MonoBehaviour
         _rectTransform = GetComponent<RectTransform>();
         _text = GetComponentInChildren<TMP_Text>();
         _fill = GetComponent<Image>();
-        _outline = GetComponent<Outline>();
+        _themeableObject = GetComponentInChildren<ThemeableObject>();
     }
 
     public void SetLetter(char letter)
@@ -56,9 +57,19 @@ public class Tile : MonoBehaviour
     {
         State = state;
 
-        TileColorConfig tileConfig = _tileColors.Values.FirstOrDefault(tile => tile.TileState == state);
-        _fillColor = tileConfig.FillColor;
-        _outlineColor = tileConfig.OutlineColor;
+        TileColorConfig tileConfig = _tileColors.DarkThemeValues.FirstOrDefault(tile => tile.TileState == state);
+
+        if (state == TileState.EmptyState || state == TileState.OccupiedState)
+        {
+            _fill.color = tileConfig.FillColor;
+            _outline.color = tileConfig.OutlineColor;
+        }
+        else
+        {
+            _fillColor = tileConfig.FillColor;
+            _outlineColor = tileConfig.OutlineColor;
+            _themeableObject.Lock();
+        }
 
         OnTileChangedState?.Invoke(this);
     }
@@ -77,7 +88,7 @@ public class Tile : MonoBehaviour
         }
 
         _fill.color = _fillColor;
-        _outline.effectColor = _outlineColor;
+        _outline.color = _outlineColor;
 
         elapsedTime = 0f;
 

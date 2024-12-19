@@ -13,5 +13,6 @@ public struct TileColorConfig
 [CreateAssetMenu()]
 public class TileColorsSO : ScriptableObject
 {
-    [field: SerializeField] public List<TileColorConfig> Values { get; private set; }
+    [field: SerializeField] public List<TileColorConfig> DarkThemeValues { get; private set; }
+    [field: SerializeField] public List<TileColorConfig> LightThemeValues { get; private set; }
 }

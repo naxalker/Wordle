@@ -92,6 +92,11 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
 
             if (letterButton.GetComponent<Image>().color == _defaultButtonColor)
                 letterButton.GetComponent<Image>().color = tile.FillColor;
+
+            if (letterButton.TryGetComponent(out ThemeableObject themeableObject))
+            {
+                themeableObject.Lock();
+            }
         }
     }
 }
