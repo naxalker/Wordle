@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Sound Effects
   m_EditorClassIdentifier: 
   <ClickSound>k__BackingField: {fileID: 8300000, guid: 95be61cee3cf3c7429ac138703db3b9f, type: 3}
+  <InvalidWordSound>k__BackingField: {fileID: 8300000, guid: 724131bc8a7f34041bb9f1701f0cb58d, type: 3}
+  <VictorySound>k__BackingField: {fileID: 8300000, guid: a0ca8964c08d54c5dbebf245bdc474ca, type: 3}
+  <LoseSound>k__BackingField: {fileID: 8300000, guid: 657578e4be6b64dbf9b09deada272e55, type: 3}

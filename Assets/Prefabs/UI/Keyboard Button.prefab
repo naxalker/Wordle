@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1376087978664989682}
   - component: {fileID: 5558007605153435244}
   - component: {fileID: 8187481758121842181}
-  - component: {fileID: 2223387528496304798}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -135,21 +134,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2223387528496304798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3199166120297959913}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 824c7cbe039fd3f44b60775c26f5c61b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _darkThemeTextColor: {r: 0.11372549, g: 0.11372549, b: 0.11372549, a: 1}
-  _lightThemeTextColor: {r: 0.8862745, g: 0.8862745, b: 0.8862745, a: 1}
-  _text: {fileID: 8187481758121842181}
 --- !u!1 &7455913930198258812
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +146,7 @@ GameObject:
   - component: {fileID: 7738455997788456158}
   - component: {fileID: 5997987060346509200}
   - component: {fileID: 3195829588461172149}
+  - component: {fileID: 6598016160485433590}
   - component: {fileID: 6363418807020323514}
   m_Layer: 5
   m_Name: Keyboard Button
@@ -284,6 +269,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6598016160485433590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7455913930198258812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e51a798676c27824db723407cc26b86d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6363418807020323514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _darkThemeBackgroundColor: {r: 0.8862745, g: 0.8862745, b: 0.8862745, a: 1}
-  _lightThemeBackgroundColor: {r: 0.11372549, g: 0.11372549, b: 0.11372549, a: 1}
+  _lightThemeBackgroundColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 1}
   _background: {fileID: 5997987060346509200}
   _hasOutline: 0
   _darkThemeOutlineColor: {r: 0, g: 0, b: 0, a: 1}

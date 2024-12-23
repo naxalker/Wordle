@@ -21,17 +21,16 @@ public class MessagePanel : MonoBehaviour
 
     [Space]
     [SerializeField] private TMP_Text _messageText;
-    [SerializeField] private Button _nextWordButton;
+    [SerializeField] private FadeableButton _nextWordButton;
 
     private void Awake()
     {
         _messageText.gameObject.SetActive(false);
         MakeMessageTransparent();
 
-        _nextWordButton.gameObject.SetActive(false);
-        MakeButtonTransparent();
+        _nextWordButton.Hide(0f);
 
-        _nextWordButton.onClick.AddListener(() => _board.StartNewGame());
+        _nextWordButton.GetComponent<Button>().onClick.AddListener(() => _board.StartNewGame());
     }
 
     private void Start()
@@ -66,13 +65,13 @@ public class MessagePanel : MonoBehaviour
             isVictory ? VICTORY_MESSAGES[Random.Range(0, VICTORY_MESSAGES.Length)] : "В следующий раз получится!";
 
         ShowMessage(gameOverMessage);
-        ShowButton();
+        _nextWordButton.Show(FADE_DURATION);
     }
 
     private void NewGameStartedHandler()
     {
         HideMessage();
-        HideButton();
+        _nextWordButton.Hide(FADE_DURATION);
     }
 
     private void ShowMessage(string message)
@@ -87,39 +86,8 @@ public class MessagePanel : MonoBehaviour
 
     private void HideMessage()
     {
-        //if (!_messageText.gameObject.activeInHierarchy)
-        //    return;
-
-        //_messageText.DOFade(0f, FADE_DURATION).SetEase(Ease.Linear)
-        //    .OnComplete(() => _messageText.gameObject.SetActive(false));
-
         MakeMessageTransparent();
         _messageText.gameObject.SetActive(false);
-    }
-
-    private void ShowButton()
-    {
-        if (_nextWordButton.gameObject.activeInHierarchy)
-            return;
-
-        _nextWordButton.gameObject.SetActive(true);
-        _nextWordButton.GetComponent<Image>()
-            .DOFade(1f, FADE_DURATION)
-            .SetEase(Ease.Linear);
-    }
-
-    private void HideButton()
-    {
-        //if (!_nextWordButton.gameObject.activeInHierarchy)
-        //    return;
-
-        //_nextWordButton.GetComponent<Image>()
-        //    .DOFade(0f, FADE_DURATION)
-        //    .SetEase(Ease.Linear)
-        //    .OnComplete(() => _nextWordButton.gameObject.SetActive(false));
-
-        MakeButtonTransparent();
-        _nextWordButton.gameObject.SetActive(false);
     }
 
     private void MakeMessageTransparent()
@@ -127,12 +95,5 @@ public class MessagePanel : MonoBehaviour
         Color color = _messageText.color;
         color.a = 0f;
         _messageText.color = color;
-    }
-
-    private void MakeButtonTransparent()
-    {
-        Color color = _nextWordButton.GetComponent<Image>().color;
-        color.a = 0f;
-        _nextWordButton.GetComponent<Image>().color = color;
     }
 }

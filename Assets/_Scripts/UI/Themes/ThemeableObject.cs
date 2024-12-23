@@ -7,4 +7,5 @@ public abstract class ThemeableObject : MonoBehaviour
     public abstract void ApplyTheme(Theme theme);
 
     public void Lock() => CanChangeColor = false;
+    public void Unlock() => CanChangeColor = true;
 }

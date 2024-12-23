@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
 {
     public static event Action<Tile> OnTileChangedState;
 
-    private const float TIME_TO_FLIP = .5f;
+    private const float TIME_TO_FLIP = .3f;
     private const float TIME_TO_SCALE = .15f;
 
     public char Letter { get; private set; }
@@ -63,11 +63,14 @@ public class Tile : MonoBehaviour
         {
             _fill.color = tileConfig.FillColor;
             _outline.color = tileConfig.OutlineColor;
+            _themeableObject.Unlock();
         }
         else
         {
             _fillColor = tileConfig.FillColor;
             _outlineColor = tileConfig.OutlineColor;
+
+            _themeableObject.ApplyTheme(Theme.Dark);
             _themeableObject.Lock();
         }
 

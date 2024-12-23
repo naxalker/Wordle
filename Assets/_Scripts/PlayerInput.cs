@@ -90,12 +90,9 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
         {
             Button letterButton = _letterToButton[tile.Letter];
 
-            if (letterButton.GetComponent<Image>().color == _defaultButtonColor)
-                letterButton.GetComponent<Image>().color = tile.FillColor;
-
-            if (letterButton.TryGetComponent(out ThemeableObject themeableObject))
+            if (letterButton.TryGetComponent(out KeyboardButton keyboardButton))
             {
-                themeableObject.Lock();
+                keyboardButton.ChangeColor(tile.FillColor);
             }
         }
     }

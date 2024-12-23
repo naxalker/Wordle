@@ -20,9 +20,12 @@ public class Header : MonoBehaviour
 
     [Header("Sound")]
     [SerializeField] private Button _soundButton;
+    [SerializeField] private Sprite _soundSprite;
+    [SerializeField] private Sprite _muteSprite;
 
     [Header("Other References")]
     [SerializeField] private Board _board;
+    [SerializeField] private AudioController _audioController;
 
     private PlayerProgressController _playerProgress;
     private ThemeController _themeController;
@@ -42,6 +45,7 @@ public class Header : MonoBehaviour
 
         _helpButton.onClick.AddListener(() => _helpPanel.Show());
         _themeButton.onClick.AddListener(() => _themeController.ChangeColors());
+        _soundButton.onClick.AddListener(() => SoundButtonPressedHandler());
     }
 
     private void OnDestroy()
@@ -52,5 +56,12 @@ public class Header : MonoBehaviour
     private void NewGameStartedHandler()
     {
         _progressText.text = $"Слов отгадано\n{_playerProgress.GuessedWordsAmount + 1}/1000";
+    }
+
+    private void SoundButtonPressedHandler()
+    {
+        _audioController.ToggleSound();
+
+        _soundButton.GetComponent<Image>().sprite = _audioController.IsMuted ? _muteSprite : _soundSprite;
     }
 }

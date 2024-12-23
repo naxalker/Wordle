@@ -112,6 +112,8 @@ public class Board : MonoBehaviour
     {
         _word = UnguessedWords[Random.Range(0, UnguessedWords.Count)];
         _word = _word.ToLower().Trim();
+
+        Debug.Log(_word);
     }
 
     private IEnumerator SubmitRow(Row row)
