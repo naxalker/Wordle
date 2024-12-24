@@ -12,6 +12,7 @@ public class Board : MonoBehaviour
     public event Action OnLetterPlaced;
     public event Action OnLetterRemoved;
     public event Action OnInvalidWord;
+    public event Action OnValidWordEntered;
     public event Action<bool, string> OnGameOver;
 
     private Row[] _rows;
@@ -22,10 +23,10 @@ public class Board : MonoBehaviour
     private int _columnIndex;
 
     private PlayerInput _playerInput;
-    private PlayerProgressController _playerProgress;
+    private WordsController _playerProgress;
 
     [Inject]
-    private void Construct(PlayerInput playerInput, PlayerProgressController playerProgress)
+    private void Construct(PlayerInput playerInput, WordsController playerProgress)
     {
         _playerInput = playerInput;
         _playerProgress = playerProgress;
@@ -125,6 +126,8 @@ public class Board : MonoBehaviour
             OnInvalidWord?.Invoke();
             yield break;
         }
+
+        OnValidWordEntered?.Invoke();
 
         string remaining = _word;
 

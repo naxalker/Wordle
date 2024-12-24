@@ -27,11 +27,11 @@ public class Header : MonoBehaviour
     [SerializeField] private Board _board;
     [SerializeField] private AudioController _audioController;
 
-    private PlayerProgressController _playerProgress;
+    private WordsController _playerProgress;
     private ThemeController _themeController;
 
     [Inject]
-    private void Construct(PlayerProgressController playerProgress, ThemeController themeController)
+    private void Construct(WordsController playerProgress, ThemeController themeController)
     {
         _playerProgress = playerProgress;
         _themeController = themeController;

@@ -7,6 +7,6 @@ public class PlayerProgressInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.BindInterfacesAndSelfTo<PlayerProgressController>().AsSingle().WithArguments(_board);
+        Container.BindInterfacesAndSelfTo<WordsController>().AsSingle().WithArguments(_board);
     }
 }

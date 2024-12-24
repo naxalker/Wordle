@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Zenject;
 
-public class PlayerProgressController : IInitializable, IDisposable
+public class WordsController : IInitializable, IDisposable
 {
     private const int WORDS_TO_GUESS_AMOUNT = 1000;
     private const string UNGUESSED_WORDS_KEY = "UnguessedWords";
@@ -14,7 +14,7 @@ public class PlayerProgressController : IInitializable, IDisposable
 
     private Board _board;
 
-    public PlayerProgressController(Board board)
+    public WordsController(Board board)
     {
         _board = board;
     }
