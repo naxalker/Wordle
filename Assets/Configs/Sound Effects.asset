@@ -16,3 +16,4 @@ MonoBehaviour:
   <InvalidWordSound>k__BackingField: {fileID: 8300000, guid: 724131bc8a7f34041bb9f1701f0cb58d, type: 3}
   <VictorySound>k__BackingField: {fileID: 8300000, guid: a0ca8964c08d54c5dbebf245bdc474ca, type: 3}
   <LoseSound>k__BackingField: {fileID: 8300000, guid: 657578e4be6b64dbf9b09deada272e55, type: 3}
+  <AllWordsGuessedSound>k__BackingField: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}

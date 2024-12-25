@@ -37,7 +37,6 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
     private Button _clearButton;
     private Button _submitButton;
 
-    private Color _defaultButtonColor;
     private Dictionary<char, Button> _letterToButton = new Dictionary<char, Button>();
 
     public PlayerInput(Board board, Button[] letterButtons, Button clearButton, Button submitButton)
@@ -50,8 +49,6 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
 
     public void Initialize()
     {
-        _defaultButtonColor = _letterButtons[0].GetComponent<Image>().color;
-
         foreach (Button button in _letterButtons)
         {
             char letter = button.GetComponentInChildren<TMP_Text>().text[0];
@@ -66,11 +63,13 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
         _clearButton.onClick.AddListener(() => _board.RemoveLetter());
         _submitButton.onClick.AddListener(() => _board.SubmitWord());
         Tile.OnTileChangedState += TileChangedStateHandler;
+        _board.OnNewGameStarted += NewGameStartedHandler;
     }
 
     public void Dispose()
     {
         Tile.OnTileChangedState -= TileChangedStateHandler;
+        _board.OnNewGameStarted -= NewGameStartedHandler;
     }
 
     public void Tick()
@@ -86,13 +85,26 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
 
     private void TileChangedStateHandler(Tile tile)
     {
-        if (tile.State == TileState.CorrectState || tile.State == TileState.WrongSpotState || tile.State == TileState.IncorrectState)
-        {
-            Button letterButton = _letterToButton[tile.Letter];
+        if (tile.State == TileState.EmptyState || tile.State == TileState.OccupiedState) { return; }
+        
+        Button letterButton = _letterToButton[tile.Letter];
 
-            if (letterButton.TryGetComponent(out KeyboardButton keyboardButton))
+        if (letterButton.TryGetComponent(out KeyboardButton keyboardButton))
+        {
+            if (tile.State == TileState.CorrectState || keyboardButton.ColorHasChanged == false)
             {
                 keyboardButton.ChangeColor(tile.FillColor);
+            }
+        }
+    }
+
+    private void NewGameStartedHandler()
+    {
+        foreach (Button button in _letterButtons)
+        {
+            if (button.TryGetComponent(out KeyboardButton keyboardButton))
+            {
+                keyboardButton.ResetButton();
             }
         }
     }

@@ -5,11 +5,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class KeyboardButton : MonoBehaviour
 {
-    private bool _buttonColorChanged;
+    private bool _colorHasChanged;
     private ThemeableImage _themeableImage;
     private Image _background;
-    
-    public bool ButtonColorChanged => _buttonColorChanged;
+
+    public bool ColorHasChanged => _colorHasChanged;
 
     private void Start()
     {
@@ -19,10 +19,17 @@ public class KeyboardButton : MonoBehaviour
 
     public void ChangeColor(Color color)
     {
-        _buttonColorChanged = true;
+        _colorHasChanged = true;
 
         _background.color = color;
 
         _themeableImage.Lock();
+    }
+
+    public void ResetButton()
+    {
+        _colorHasChanged = false;
+
+        _themeableImage.Unlock();
     }
 }

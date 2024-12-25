@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Zenject;
 
+using PlayerPrefs = RedefineYG.PlayerPrefs;
+
 public class PlayerStatistic : IInitializable, ITickable, IDisposable
 {
     private const float MIN_TIME_BETWEEN_TIME_SAVING = 1f;
@@ -15,6 +17,7 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
     private const string TOTAL_TIME_PLAYED_KEY = "totalTimePlayed";
 
     public Action<float> OnTotalTimeValueChanged;
+    public Action<int> OnTotalWinsValueChanged;
 
     public int TotalGamesPlayed { get; private set; }
     public int TotalWins { get; private set; }
@@ -63,6 +66,7 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
             OnTotalTimeValueChanged?.Invoke(TotalTimePlayed);
 
             PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, TotalTimePlayed);
+            PlayerPrefs.Save();
 
             _totalTimeSavingTimer = MIN_TIME_BETWEEN_TIME_SAVING;
         }
@@ -82,6 +86,8 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
         if (hasWon)
         {
             TotalWins++;
+            OnTotalWinsValueChanged?.Invoke(TotalWins);
+
             CurrentWinStreak++;
 
             if (CurrentWinStreak > BestWinStreak)
@@ -123,5 +129,7 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
         PlayerPrefs.SetInt(TOTAL_ATTEMPTS_KEY, TotalAttempts);
         PlayerPrefs.SetFloat(FASTEST_SOLVE_TIME_KEY, FastestSolveTime);
         PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, TotalTimePlayed);
+
+        PlayerPrefs.Save();
     }
 }

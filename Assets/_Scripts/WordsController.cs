@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Zenject;
+using PlayerPrefs = RedefineYG.PlayerPrefs;
 
 public class WordsController : IInitializable, IDisposable
 {
-    private const int WORDS_TO_GUESS_AMOUNT = 1000;
+    public static readonly int WORDS_TO_GUESS_AMOUNT = 1000;
     private const string UNGUESSED_WORDS_KEY = "UnguessedWords";
 
     public Action OnAllWordsGuessed;
@@ -77,6 +78,7 @@ public class WordsController : IInitializable, IDisposable
     {
         string joinedString = string.Join(",", _unguessedWords.ToArray());
         PlayerPrefs.SetString(UNGUESSED_WORDS_KEY, joinedString);
+        PlayerPrefs.Save();
     }
 
     private List<string> LoadProgress()

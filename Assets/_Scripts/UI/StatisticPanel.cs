@@ -7,6 +7,7 @@ public class StatisticPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _totalGamesPlayedText;
     [SerializeField] private TMP_Text _totalWinsText;
+    [SerializeField] private TMP_Text _totalWinsPercentageText;
     [SerializeField] private TMP_Text _currentWinStreakText;
     [SerializeField] private TMP_Text _bestWinStreakText;
     [SerializeField] private TMP_Text _averageAttemptsText;
@@ -44,12 +45,22 @@ public class StatisticPanel : MonoBehaviour
 
         _totalGamesPlayedText.text = GetPlayedGamesText(_playerStatistic.TotalGamesPlayed);
         _totalWinsText.text = _playerStatistic.TotalWins.ToString();
+
+        if (_playerStatistic.TotalGamesPlayed > 0)
+        {
+            _totalWinsPercentageText.text = $"({Mathf.RoundToInt((float)_playerStatistic.TotalWins / _playerStatistic.TotalGamesPlayed) * 100}%)";
+        }
+        else
+        {
+            _totalWinsPercentageText.text = "";
+        }
+        
         _currentWinStreakText.text = _playerStatistic.CurrentWinStreak.ToString();
         _bestWinStreakText.text = _playerStatistic.BestWinStreak.ToString();
 
         if (_playerStatistic.TotalWins > 0)
         {
-            _averageAttemptsText.text = Mathf.RoundToInt(_playerStatistic.TotalAttempts / _playerStatistic.TotalWins).ToString();
+            _averageAttemptsText.text = Mathf.RoundToInt((float)_playerStatistic.TotalAttempts / _playerStatistic.TotalWins).ToString();
         }
         else
         {

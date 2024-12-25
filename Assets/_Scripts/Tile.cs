@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
 {
     public static event Action<Tile> OnTileChangedState;
 
-    private const float TIME_TO_FLIP = .3f;
+    private const float TIME_TO_FLIP = .4f;
     private const float TIME_TO_SCALE = .15f;
 
     public char Letter { get; private set; }
