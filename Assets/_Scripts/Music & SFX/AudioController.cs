@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class AudioController : MonoBehaviour
 {
@@ -8,6 +9,13 @@ public class AudioController : MonoBehaviour
     private bool _isMuted = false;
 
     private AudioSource _audioSource;
+    private WordsController _wordsController;
+
+    [Inject]
+    private void Construct(WordsController wordsController)
+    {
+        _wordsController = wordsController;
+    }
 
     private void Awake()
     {
@@ -16,6 +24,7 @@ public class AudioController : MonoBehaviour
         _board.OnLetterPlaced += LetterPlacedHandler;
         _board.OnInvalidWord += InvalidWordEnteredHandler;
         _board.OnGameOver += GameOverHandler;
+        _wordsController.OnAllWordsGuessed += AllWordsGuessedHandler;
     }
 
     private void OnDestroy()
@@ -23,6 +32,7 @@ public class AudioController : MonoBehaviour
         _board.OnLetterPlaced -= LetterPlacedHandler;
         _board.OnInvalidWord -= InvalidWordEnteredHandler;
         _board.OnGameOver -= GameOverHandler;
+        _wordsController.OnAllWordsGuessed -= AllWordsGuessedHandler;
     }
 
     public bool IsMuted => _isMuted;
@@ -43,6 +53,11 @@ public class AudioController : MonoBehaviour
         {
             PlayClip(_soundEffects.LoseSound);
         }
+    }
+
+    private void AllWordsGuessedHandler()
+    {
+        PlayClip(_soundEffects.AllWordsGuessedSound);
     }
 
     private void PlayClip(AudioClip clip, bool pitched = false)

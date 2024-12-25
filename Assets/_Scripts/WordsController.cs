@@ -9,6 +9,8 @@ public class WordsController : IInitializable, IDisposable
     private const int WORDS_TO_GUESS_AMOUNT = 1000;
     private const string UNGUESSED_WORDS_KEY = "UnguessedWords";
 
+    public Action OnAllWordsGuessed;
+
     private List<string> _unguessedWords;
     private string[] _validWords;
 
@@ -49,6 +51,14 @@ public class WordsController : IInitializable, IDisposable
         if (isVictory)
         {
             _unguessedWords.Remove(word);
+
+            if (_unguessedWords.Count == 0)
+            {
+                OnAllWordsGuessed?.Invoke();
+
+                _unguessedWords = _validWords.Take(WORDS_TO_GUESS_AMOUNT).ToList();
+            }
+
             SaveProgress();
         }
     }
