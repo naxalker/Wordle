@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class PlayerProgressInstaller : MonoInstaller
+public class WordsControllerInstaller : MonoInstaller
 {
     [SerializeField] private Board _board;
 

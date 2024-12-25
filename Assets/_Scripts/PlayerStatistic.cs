@@ -1,9 +1,10 @@
-using TMPro;
+using System;
 using UnityEngine;
+using Zenject;
 
-public class PlayerStatistic : MonoBehaviour
+public class PlayerStatistic : IInitializable, ITickable, IDisposable
 {
-    private const float TIME_COUNTER_DURATION = 1f;
+    private const float MIN_TIME_BETWEEN_TIME_SAVING = 1f;
 
     private const string TOTAL_GAMES_PLAYED_KEY = "totalGamesPlayed";
     private const string TOTAL_WINS_KEY = "totalWins";
@@ -13,124 +14,91 @@ public class PlayerStatistic : MonoBehaviour
     private const string FASTEST_SOLVE_TIME_KEY = "fastestSolveTime";
     private const string TOTAL_TIME_PLAYED_KEY = "totalTimePlayed";
 
-    [SerializeField] private TMP_Text _totalGamesPlayedText;
-    [SerializeField] private TMP_Text _totalWinsText;
-    [SerializeField] private TMP_Text _currentWinStreakText;
-    [SerializeField] private TMP_Text _bestWinStreakText;
-    [SerializeField] private TMP_Text _averageAttemptsText;
-    [SerializeField] private TMP_Text _fastestSolveTimeText;
-    [SerializeField] private TMP_Text _totalTimeText;
+    public Action<float> OnTotalTimeValueChanged;
 
-    [SerializeField] private Board _board;
-
-    private int _totalGamesPlayed;
-    private int _totalWins;
-    private int _currentWinStreak;
-    private int _bestWinStreak;
-    private int _totalAttempts;
-    private float _fastestSolveTime;
-    private float _totalTimePlayed;
+    public int TotalGamesPlayed { get; private set; }
+    public int TotalWins { get; private set; }
+    public int CurrentWinStreak { get; private set; }
+    public int BestWinStreak { get; private set; }
+    public int TotalAttempts { get; private set; }
+    public float FastestSolveTime { get; private set; }
+    public float TotalTimePlayed { get; private set; }
 
     private int _currentAttempts = 0;
     private float _currentSessionTime = 0f;
     private float _totalTimeSavingTimer;
 
-    private void Start()
+    private Board _board;
+
+    public PlayerStatistic(Board board)
     {
-        _totalGamesPlayed = PlayerPrefs.GetInt(TOTAL_GAMES_PLAYED_KEY, 0);
-        _totalWins = PlayerPrefs.GetInt(TOTAL_WINS_KEY, 0);
-        _currentWinStreak = PlayerPrefs.GetInt(CURRENT_WIN_STREAK_KEY, 0);
-        _bestWinStreak = PlayerPrefs.GetInt(BEST_WIN_STREAK_KEY, 0);
-        _totalAttempts = PlayerPrefs.GetInt(TOTAL_ATTEMPTS_KEY, 0);
-        _fastestSolveTime = PlayerPrefs.GetFloat(FASTEST_SOLVE_TIME_KEY, 0f);
-        _totalTimePlayed = PlayerPrefs.GetFloat(TOTAL_TIME_PLAYED_KEY, 0f);
-
-        Show();
-
-        _totalTimeSavingTimer = TIME_COUNTER_DURATION;
-
-        _board.OnGameOver -= GameOverHandler;
-        _board.OnValidWordEntered -= ValidWordEnteredHandler;
-        _board.OnNewGameStarted -= NewGameStartedHandler;
+        _board = board;
     }
 
-    private void Update()
+    public void Initialize()
     {
-        _totalTimeSavingTimer -= Time.deltaTime;
+        TotalGamesPlayed = PlayerPrefs.GetInt(TOTAL_GAMES_PLAYED_KEY, 0);
+        TotalWins = PlayerPrefs.GetInt(TOTAL_WINS_KEY, 0);
+        CurrentWinStreak = PlayerPrefs.GetInt(CURRENT_WIN_STREAK_KEY, 0);
+        BestWinStreak = PlayerPrefs.GetInt(BEST_WIN_STREAK_KEY, 0);
+        TotalAttempts = PlayerPrefs.GetInt(TOTAL_ATTEMPTS_KEY, 0);
+        FastestSolveTime = PlayerPrefs.GetFloat(FASTEST_SOLVE_TIME_KEY, Mathf.Infinity);
+        TotalTimePlayed = PlayerPrefs.GetFloat(TOTAL_TIME_PLAYED_KEY, 0f);
+
+        _totalTimeSavingTimer = MIN_TIME_BETWEEN_TIME_SAVING;
+
+        _board.OnGameOver += GameOverHandler;
+        _board.OnValidWordEntered += ValidWordEnteredHandler;
+        _board.OnNewGameStarted += NewGameStartedHandler;
+    }
+
+    public void Tick()
+    {
         _currentSessionTime += Time.deltaTime;
+        _totalTimeSavingTimer -= Time.deltaTime;
 
         if (_totalTimeSavingTimer <= 0f)
         {
-            _totalTimePlayed += TIME_COUNTER_DURATION;
+            TotalTimePlayed += MIN_TIME_BETWEEN_TIME_SAVING;
+            OnTotalTimeValueChanged?.Invoke(TotalTimePlayed);
 
-            int minutes = Mathf.FloorToInt(_totalTimePlayed / 60);
-            int seconds = Mathf.FloorToInt(_totalTimePlayed % 60);
+            PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, TotalTimePlayed);
 
-            _totalTimeText.text = $"{minutes:00}:{seconds:00}";
-            PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, _totalTimePlayed);
-
-            _totalTimeSavingTimer = TIME_COUNTER_DURATION;
+            _totalTimeSavingTimer = MIN_TIME_BETWEEN_TIME_SAVING;
         }
     }
 
-    private void OnDestroy()
+    public void Dispose()
     {
         _board.OnGameOver -= GameOverHandler;
         _board.OnValidWordEntered -= ValidWordEnteredHandler;
         _board.OnNewGameStarted -= NewGameStartedHandler;
-    }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-
-        _totalGamesPlayedText.text = $"Ты сыграл уже - <b>{_totalGamesPlayed} игр</b>";
-        _totalWinsText.text = _totalWins.ToString();
-        _currentWinStreakText.text = _currentWinStreak.ToString();
-        _bestWinStreakText.text = _bestWinStreak.ToString();
-
-        if (_totalWins > 0)
-        {
-            _averageAttemptsText.text = Mathf.RoundToInt(_totalAttempts / _totalWins).ToString();
-        }
-        else
-        {
-            _averageAttemptsText.text = "-";
-        }
-        
-        _fastestSolveTimeText.text = _fastestSolveTime.ToString();
-        _totalWinsText.text = _totalGamesPlayed.ToString();
-    }
-
-    public void Hide()
-    {
-
     }
 
     private void GameOverHandler(bool hasWon, string word)
     {
-        _totalGamesPlayed++;
+        TotalGamesPlayed++;
 
         if (hasWon)
         {
-            _totalWins++;
-            _currentWinStreak++;
+            TotalWins++;
+            CurrentWinStreak++;
 
-            if (_currentWinStreak > _bestWinStreak)
+            if (CurrentWinStreak > BestWinStreak)
             {
-                _bestWinStreak = _currentWinStreak;
+                BestWinStreak = CurrentWinStreak;
             }
 
-            _totalAttempts += _currentAttempts;
+            TotalAttempts += _currentAttempts;
 
-            if (_currentSessionTime < _fastestSolveTime)
+            if (_currentSessionTime < FastestSolveTime)
             {
-                _fastestSolveTime = _currentSessionTime;
+                FastestSolveTime = _currentSessionTime;
             }
         }
         else
         {
-            _currentWinStreak = 0;
+            CurrentWinStreak = 0;
         }
 
         SaveStatistic();
@@ -149,11 +117,11 @@ public class PlayerStatistic : MonoBehaviour
 
     private void SaveStatistic()
     {
-        PlayerPrefs.SetInt(TOTAL_GAMES_PLAYED_KEY, _totalGamesPlayed);
-        PlayerPrefs.SetInt(TOTAL_WINS_KEY, _totalWins);
-        PlayerPrefs.SetInt(CURRENT_WIN_STREAK_KEY, _currentWinStreak);
-        PlayerPrefs.SetInt(TOTAL_ATTEMPTS_KEY, _totalAttempts);
-        PlayerPrefs.SetFloat(FASTEST_SOLVE_TIME_KEY, _fastestSolveTime);
-        PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, _totalTimePlayed);
+        PlayerPrefs.SetInt(TOTAL_GAMES_PLAYED_KEY, TotalGamesPlayed);
+        PlayerPrefs.SetInt(TOTAL_WINS_KEY, TotalWins);
+        PlayerPrefs.SetInt(CURRENT_WIN_STREAK_KEY, CurrentWinStreak);
+        PlayerPrefs.SetInt(TOTAL_ATTEMPTS_KEY, TotalAttempts);
+        PlayerPrefs.SetFloat(FASTEST_SOLVE_TIME_KEY, FastestSolveTime);
+        PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, TotalTimePlayed);
     }
 }

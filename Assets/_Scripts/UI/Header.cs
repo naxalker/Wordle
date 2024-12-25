@@ -11,6 +11,7 @@ public class Header : MonoBehaviour
 
     [Header("Statistic")]
     [SerializeField] private Button _statButton;
+    [SerializeField] private StatisticPanel _statisticPanel;
 
     [Header("Progress Text")]
     [SerializeField] private TMP_Text _progressText;
@@ -22,10 +23,10 @@ public class Header : MonoBehaviour
     [SerializeField] private Button _soundButton;
     [SerializeField] private Sprite _soundSprite;
     [SerializeField] private Sprite _muteSprite;
+    [SerializeField] private AudioController _audioController;
 
     [Header("Other References")]
     [SerializeField] private Board _board;
-    [SerializeField] private AudioController _audioController;
 
     private WordsController _playerProgress;
     private ThemeController _themeController;
@@ -46,6 +47,7 @@ public class Header : MonoBehaviour
         _helpButton.onClick.AddListener(() => _helpPanel.Show());
         _themeButton.onClick.AddListener(() => _themeController.ChangeColors());
         _soundButton.onClick.AddListener(() => SoundButtonPressedHandler());
+        _statButton.onClick.AddListener(() => _statisticPanel.Show());
     }
 
     private void OnDestroy()
