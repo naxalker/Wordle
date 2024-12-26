@@ -48,7 +48,7 @@ public class StatisticPanel : MonoBehaviour
 
         if (_playerStatistic.TotalGamesPlayed > 0)
         {
-            _totalWinsPercentageText.text = $"({Mathf.RoundToInt((float)_playerStatistic.TotalWins / _playerStatistic.TotalGamesPlayed) * 100}%)";
+            _totalWinsPercentageText.text = $"({Mathf.RoundToInt((float)_playerStatistic.TotalWins / _playerStatistic.TotalGamesPlayed * 100)}%)";
         }
         else
         {
@@ -75,8 +75,6 @@ public class StatisticPanel : MonoBehaviour
         {
             _fastestSolveTimeText.text = "-";
         }
-        
-        _totalWinsText.text = _playerStatistic.TotalGamesPlayed.ToString();
 
         _totalTimeText.text = GetFormattedTime(_playerStatistic.TotalTimePlayed);
     }

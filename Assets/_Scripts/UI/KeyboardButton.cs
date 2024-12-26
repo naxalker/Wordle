@@ -11,7 +11,7 @@ public class KeyboardButton : MonoBehaviour
 
     public bool ColorHasChanged => _colorHasChanged;
 
-    private void Start()
+    private void Awake()
     {
         _themeableImage = GetComponent<ThemeableImage>();
         _background = GetComponent<Image>();

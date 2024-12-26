@@ -126,6 +126,7 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
         PlayerPrefs.SetInt(TOTAL_GAMES_PLAYED_KEY, TotalGamesPlayed);
         PlayerPrefs.SetInt(TOTAL_WINS_KEY, TotalWins);
         PlayerPrefs.SetInt(CURRENT_WIN_STREAK_KEY, CurrentWinStreak);
+        PlayerPrefs.SetInt(BEST_WIN_STREAK_KEY, BestWinStreak);
         PlayerPrefs.SetInt(TOTAL_ATTEMPTS_KEY, TotalAttempts);
         PlayerPrefs.SetFloat(FASTEST_SOLVE_TIME_KEY, FastestSolveTime);
         PlayerPrefs.SetFloat(TOTAL_TIME_PLAYED_KEY, TotalTimePlayed);

@@ -15,6 +15,8 @@ public class Board : MonoBehaviour
     public event Action OnValidWordEntered;
     public event Action<bool, string> OnGameOver;
 
+    private bool _isActive;
+
     private Row[] _rows;
 
     private string _word;
@@ -60,15 +62,14 @@ public class Board : MonoBehaviour
         ClearBoard();
         SetRandomWord();
 
-        enabled = true;
+        _isActive = true;
 
         OnNewGameStarted?.Invoke();
     }
 
     public void PlaceLetter(char letter)
     {
-        if (!enabled)
-            return;
+        if (!_isActive) { return; }
 
         Row currentRow = _rows[_rowIndex];
 
@@ -84,8 +85,7 @@ public class Board : MonoBehaviour
 
     public void SubmitWord()
     {
-        if (!enabled)
-            return;
+        if (!_isActive) { return; }
 
         Row currentRow = _rows[_rowIndex];
 
@@ -97,8 +97,7 @@ public class Board : MonoBehaviour
 
     public void RemoveLetter()
     {
-        if (!enabled)
-            return;
+        if (!_isActive) { return; }
 
         Row currentRow = _rows[_rowIndex];
 
@@ -114,7 +113,9 @@ public class Board : MonoBehaviour
         _word = UnguessedWords[Random.Range(0, UnguessedWords.Count)];
         _word = _word.ToLower().Trim();
 
+#if UNITY_EDITOR
         Debug.Log(_word);
+#endif
     }
 
     private IEnumerator SubmitRow(Row row)
@@ -126,6 +127,8 @@ public class Board : MonoBehaviour
             OnInvalidWord?.Invoke();
             yield break;
         }
+
+        _isActive = false;
 
         OnValidWordEntered?.Invoke();
 
@@ -176,18 +179,20 @@ public class Board : MonoBehaviour
 
         if (HasWon(row))
         {
-            OnGameOver?.Invoke(true, row.Word);
-            enabled = false;
+            OnGameOver?.Invoke(true, _word);
         }
-
-        _rowIndex++;
-        _columnIndex = 0;
-
-        if (_rowIndex >= _rows.Length)
+        else
         {
-            OnGameOver?.Invoke(false, row.Word);
-            enabled = false;
+            _rowIndex++;
+            _columnIndex = 0;
+
+            if (_rowIndex >= _rows.Length)
+            {
+                OnGameOver?.Invoke(false, _word);
+            }
         }
+
+        _isActive = true;
     }
 
     private void ClearBoard()
@@ -207,17 +212,17 @@ public class Board : MonoBehaviour
 
     private void KeyPressedHandler(KeyCode keyCode)
     {
-        if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z)
-        {
-            PlaceLetter(PlayerInput.ENGLISH_TO_RUSSIAN_MAP[keyCode]);
-        }
-        else if (keyCode == KeyCode.Return)
+        if (keyCode == KeyCode.Return)
         {
             SubmitWord();
         }
         else if (keyCode == KeyCode.Backspace)
         {
             RemoveLetter();
+        }
+        else
+        {
+            PlaceLetter(PlayerInput.ENGLISH_TO_RUSSIAN_MAP[keyCode]);
         }
     }
 

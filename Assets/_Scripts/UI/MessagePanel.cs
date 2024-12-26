@@ -16,14 +16,14 @@ public class MessagePanel : MonoBehaviour
         "Ура! Слово отгадано!"
     };
 
-    private static string[] LOSE_MESSAGES = new string[]
-    {
-        "В следующий раз получится!",
-        "Попробуй снова, ты справишься!",
-        "Отличная попытка, попробуй ещё раз!",
-        "Упс! Не в этот раз.",
-        "Неудачи — это часть пути к победе."
-    };
+    //private static string[] LOSE_MESSAGES = new string[]
+    //{
+    //    "В следующий раз получится!",
+    //    "Попробуй снова, ты справишься!",
+    //    "Отличная попытка, попробуй ещё раз!",
+    //    "Упс! Не в этот раз.",
+    //    "Неудачи — это часть пути к победе."
+    //};
 
     [Header("References")]
     [SerializeField] private Board _board;
@@ -70,9 +70,9 @@ public class MessagePanel : MonoBehaviour
 
     private void GameOverHandler(bool isVictory, string word)
     {
-        string gameOverMessage = isVictory ? 
-            VICTORY_MESSAGES[Random.Range(0, VICTORY_MESSAGES.Length)] : 
-            LOSE_MESSAGES[Random.Range(0, LOSE_MESSAGES.Length)];
+        string gameOverMessage = isVictory ?
+            VICTORY_MESSAGES[Random.Range(0, VICTORY_MESSAGES.Length)] :
+            $"Загаданное слово - <color=#538D4E><b>{word.ToUpper()}</b></color>";
 
         ShowMessage(gameOverMessage);
         _nextWordButton.Show(FADE_DURATION);

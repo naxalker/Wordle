@@ -17,7 +17,9 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
         { KeyCode.P, 'ç' }, { KeyCode.Q, 'é' }, { KeyCode.R, 'ê' },
         { KeyCode.S, 'û' }, { KeyCode.T, 'å' }, { KeyCode.U, 'ã' },
         { KeyCode.V, 'ì' }, { KeyCode.W, 'ö' }, { KeyCode.X, '÷' },
-        { KeyCode.Y, 'í' }, { KeyCode.Z, 'ÿ' }
+        { KeyCode.Y, 'í' }, { KeyCode.Z, 'ÿ' }, { KeyCode.LeftBracket, 'õ' },
+        { KeyCode.RightBracket, 'ú' }, { KeyCode.Semicolon, 'æ' },
+        { KeyCode.Quote, 'ý' }, { KeyCode.Comma, 'á' }, { KeyCode.Period, 'þ' }
     };
 
     private static readonly KeyCode[] SUPPORTED_KEYS = new KeyCode[]
@@ -26,7 +28,9 @@ public class PlayerInput : IInitializable, ITickable, IDisposable
         KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L,
         KeyCode.M, KeyCode.N, KeyCode.O, KeyCode.P, KeyCode.Q, KeyCode.R,
         KeyCode.S, KeyCode.T, KeyCode.U, KeyCode.V, KeyCode.W, KeyCode.X,
-        KeyCode.Y, KeyCode.Z, KeyCode.Backspace, KeyCode.Return
+        KeyCode.Y, KeyCode.Z, KeyCode.LeftBracket, KeyCode.RightBracket, 
+        KeyCode.Semicolon, KeyCode.Quote, KeyCode.Comma, KeyCode.Period,
+        KeyCode.Backspace, KeyCode.Return
     };
 
     public event Action<KeyCode> OnKeyPressed;
