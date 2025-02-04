@@ -79,6 +79,19 @@ public class PlayerStatistic : IInitializable, ITickable, IDisposable
         _board.OnNewGameStarted -= NewGameStartedHandler;
     }
 
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteAll();
+
+        TotalGamesPlayed = 0;
+        TotalWins = 0;
+        CurrentWinStreak = 0;
+        BestWinStreak = 0;
+        TotalAttempts = 0;
+        FastestSolveTime = Mathf.Infinity;
+        TotalTimePlayed = 0;
+    }
+
     private void GameOverHandler(bool hasWon, string word)
     {
         TotalGamesPlayed++;

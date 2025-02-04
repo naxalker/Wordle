@@ -20,6 +20,7 @@ public class Board : MonoBehaviour
     private Row[] _rows;
 
     private string _word;
+    private char[] _guessedLettersInWord = new char[5];
 
     private int _rowIndex;
     private int _columnIndex;
@@ -33,6 +34,9 @@ public class Board : MonoBehaviour
         _playerInput = playerInput;
         _playerProgress = playerProgress;
     }
+
+    public string Word => _word;
+    public char[] GuessedLettersInWord => _guessedLettersInWord;
 
     private List<string> UnguessedWords => _playerProgress.UnguessedWords;
     private string[] ValidWords => _playerProgress.ValidWords;
@@ -61,6 +65,11 @@ public class Board : MonoBehaviour
     {
         ClearBoard();
         SetRandomWord();
+
+        for (int i = 0; i < _guessedLettersInWord.Length; i++)
+        {
+            _guessedLettersInWord[i] = '\0';
+        }
 
         _isActive = true;
 
@@ -141,6 +150,7 @@ public class Board : MonoBehaviour
             if (tile.Letter == _word[i])
             {
                 tile.SetState(TileState.CorrectState);
+                _guessedLettersInWord[i] = _word[i];
 
                 remaining = remaining.Remove(i, 1);
                 remaining = remaining.Insert(i, " ");
@@ -172,7 +182,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        foreach(Tile tile in row.Tiles)
+        foreach (Tile tile in row.Tiles)
         {
             yield return StartCoroutine(tile.Flip());
         }

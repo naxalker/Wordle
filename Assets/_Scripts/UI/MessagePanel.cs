@@ -58,6 +58,16 @@ public class MessagePanel : MonoBehaviour
         _board.OnNewGameStarted -= NewGameStartedHandler;
     }
 
+    public void ShowMessage(string message)
+    {
+        if (_messageText.gameObject.activeInHierarchy)
+            return;
+
+        _messageText.gameObject.SetActive(true);
+        _messageText.text = message;
+        _messageText.DOFade(1f, FADE_DURATION).SetEase(Ease.Linear);
+    }
+
     private void InvalidWordHandler()
     {
         ShowMessage("Слово не найдено в словаре");
@@ -82,16 +92,6 @@ public class MessagePanel : MonoBehaviour
     {
         HideMessage();
         _nextWordButton.Hide(FADE_DURATION);
-    }
-
-    private void ShowMessage(string message)
-    {
-        if (_messageText.gameObject.activeInHierarchy)
-            return;
-
-        _messageText.gameObject.SetActive(true);
-        _messageText.text = message;
-        _messageText.DOFade(1f, FADE_DURATION).SetEase(Ease.Linear);
     }
 
     private void HideMessage()

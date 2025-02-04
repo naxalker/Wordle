@@ -1,3 +1,0 @@
-Build path: D:/Unity/Wordle/Builds
-Build number: 39
-PluginYG version: 2.002

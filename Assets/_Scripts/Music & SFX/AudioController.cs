@@ -6,7 +6,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] private SoundEffectsSO _soundEffects;
     [SerializeField] private Board _board;
 
-    private bool _isMuted = false;
+    private bool _isActive = true;
 
     private AudioSource _audioSource;
     private WordsController _wordsController;
@@ -35,9 +35,10 @@ public class AudioController : MonoBehaviour
         _wordsController.OnAllWordsGuessed -= AllWordsGuessedHandler;
     }
 
-    public bool IsMuted => _isMuted;
-
-    public void ToggleSound() => _isMuted = !_isMuted;
+    public void ToggleSound(bool isActive)
+    {
+        _isActive = isActive;
+    }
 
     private void LetterPlacedHandler() => PlayClip(_soundEffects.ClickSound, true);
 
@@ -62,7 +63,7 @@ public class AudioController : MonoBehaviour
 
     private void PlayClip(AudioClip clip, bool pitched = false)
     {
-        if (_isMuted) { return; }
+        if (!_isActive) { return; }
 
         if (pitched)
             _audioSource.pitch = Random.Range(.8f, 1.2f);

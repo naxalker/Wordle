@@ -16,26 +16,19 @@ public class Header : MonoBehaviour
     [Header("Progress Text")]
     [SerializeField] private TMP_Text _progressText;
 
-    [Header("Theme")]
-    [SerializeField] private Button _themeButton;
-
-    [Header("Sound")]
-    [SerializeField] private Button _soundButton;
-    [SerializeField] private Sprite _soundSprite;
-    [SerializeField] private Sprite _muteSprite;
-    [SerializeField] private AudioController _audioController;
+    [Header("Settings")]
+    [SerializeField] private Button _settingsButton;
+    [SerializeField] private SettingsPanel _settingsPanel;
 
     [Header("Other References")]
     [SerializeField] private Board _board;
 
     private WordsController _playerProgress;
-    private ThemeController _themeController;
 
     [Inject]
-    private void Construct(WordsController playerProgress, ThemeController themeController)
+    private void Construct(WordsController playerProgress)
     {
         _playerProgress = playerProgress;
-        _themeController = themeController;
     }
 
     private void Start()
@@ -43,9 +36,8 @@ public class Header : MonoBehaviour
         _board.OnNewGameStarted += NewGameStartedHandler;
 
         _helpButton.onClick.AddListener(() => _helpPanel.Show());
-        _themeButton.onClick.AddListener(() => _themeController.ChangeColors());
-        _soundButton.onClick.AddListener(() => SoundButtonPressedHandler());
         _statButton.onClick.AddListener(() => _statisticPanel.Show());
+        _settingsButton.onClick.AddListener(() => _settingsPanel.gameObject.SetActive(true));
     }
 
     private void OnDestroy()
@@ -55,13 +47,6 @@ public class Header : MonoBehaviour
 
     private void NewGameStartedHandler()
     {
-        _progressText.text = $"Слов отгадано\n{_playerProgress.GuessedWordsAmount}/{WordsController.WORDS_TO_GUESS_AMOUNT}";
-    }
-
-    private void SoundButtonPressedHandler()
-    {
-        _audioController.ToggleSound();
-
-        _soundButton.GetComponent<Image>().sprite = _audioController.IsMuted ? _muteSprite : _soundSprite;
+        _progressText.text = $"РЎР»РѕРІ РѕС‚РіР°РґР°РЅРѕ\n{_playerProgress.GuessedWordsAmount}/{WordsController.WORDS_TO_GUESS_AMOUNT}";
     }
 }

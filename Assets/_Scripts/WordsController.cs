@@ -47,6 +47,12 @@ public class WordsController : IInitializable, IDisposable
         _board.OnGameOver -= GameOverHandler;
     }
 
+    public void ResetProgress()
+    {
+        _unguessedWords = _validWords.Take(WORDS_TO_GUESS_AMOUNT).ToList();
+        SaveProgress();
+    }
+
     private void GameOverHandler(bool isVictory, string word)
     {
         if (isVictory)
