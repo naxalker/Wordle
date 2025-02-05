@@ -60,12 +60,9 @@ public class MessagePanel : MonoBehaviour
 
     public void ShowMessage(string message)
     {
-        if (_messageText.gameObject.activeInHierarchy)
-            return;
-
         _messageText.gameObject.SetActive(true);
         _messageText.text = message;
-        _messageText.DOFade(1f, FADE_DURATION).SetEase(Ease.Linear);
+        _messageText.DOFade(1f, FADE_DURATION).From(0f).SetEase(Ease.Linear);
     }
 
     private void InvalidWordHandler()

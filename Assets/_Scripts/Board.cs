@@ -107,10 +107,12 @@ public class Board : MonoBehaviour
     public void RemoveLetter()
     {
         if (!_isActive) { return; }
+        if (_columnIndex == 0) { return; }
 
         Row currentRow = _rows[_rowIndex];
 
-        _columnIndex = Mathf.Max(_columnIndex - 1, 0);
+        _columnIndex--;
+
         currentRow.Tiles[_columnIndex].SetLetter('\0');
         currentRow.Tiles[_columnIndex].SetState(TileState.EmptyState);
 
