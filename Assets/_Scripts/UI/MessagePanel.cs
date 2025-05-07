@@ -9,21 +9,12 @@ public class MessagePanel : MonoBehaviour
     private static float FADE_DURATION = .5f;
     private static string[] VICTORY_MESSAGES = new string[]
     {
-        "Поздравляем! Все верно!",
-        "Хорошая работа!",
-        "Молодец! Верное слово!",
-        "Ты справился! Было тяжело?",
-        "Ура! Слово отгадано!"
+        "РџРѕР·РґСЂР°РІР»СЏРµРј! Р’СЃРµ РІРµСЂРЅРѕ!",
+        "РҐРѕСЂРѕС€Р°СЏ СЂР°Р±РѕС‚Р°!",
+        "РњРѕР»РѕРґРµС†! Р’РµСЂРЅРѕРµ СЃР»РѕРІРѕ!",
+        "РўС‹ СЃРїСЂР°РІРёР»СЃСЏ! Р‘С‹Р»Рѕ С‚СЏР¶РµР»Рѕ?",
+        "РЈСЂР°! РЎР»РѕРІРѕ РѕС‚РіР°РґР°РЅРѕ!"
     };
-
-    //private static string[] LOSE_MESSAGES = new string[]
-    //{
-    //    "В следующий раз получится!",
-    //    "Попробуй снова, ты справишься!",
-    //    "Отличная попытка, попробуй ещё раз!",
-    //    "Упс! Не в этот раз.",
-    //    "Неудачи — это часть пути к победе."
-    //};
 
     [Header("References")]
     [SerializeField] private Board _board;
@@ -67,7 +58,7 @@ public class MessagePanel : MonoBehaviour
 
     private void InvalidWordHandler()
     {
-        ShowMessage("Слово не найдено в словаре");
+        ShowMessage("РЎР»РѕРІРѕ РЅРµ РЅР°Р№РґРµРЅРѕ РІ СЃР»РѕРІР°СЂРµ");
     }
 
     private void LetterRemovedHandler()
@@ -79,7 +70,7 @@ public class MessagePanel : MonoBehaviour
     {
         string gameOverMessage = isVictory ?
             VICTORY_MESSAGES[Random.Range(0, VICTORY_MESSAGES.Length)] :
-            $"Загаданное слово - <color=#538D4E><b>{word.ToUpper()}</b></color>";
+            $"Р—Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ - <color=#538D4E><b>{word.ToUpper()}</b></color>";
 
         ShowMessage(gameOverMessage);
         _nextWordButton.Show(FADE_DURATION);

@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))]
 public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 {
     public Action<bool> OnToggled;
@@ -62,7 +62,6 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
     {
         Toggle();
     }
-
 
     private void Toggle()
     {

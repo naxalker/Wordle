@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using YG;
@@ -7,6 +5,14 @@ using YG;
 public class ContactLink : MonoBehaviour, IPointerClickHandler
 {
     private const string LINK = "https://t.me/defleg";
+
+    private void Awake()
+    {
+        if (YG2.platform == "CrazyGames")
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {

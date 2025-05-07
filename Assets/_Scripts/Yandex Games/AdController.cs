@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.UI;
 using YG;
 using Zenject;
 
@@ -7,9 +6,9 @@ public class AdController : IInitializable, IDisposable
 {
     private Board _board;
     private MessagePanel _messagePanel;
-    private Button _hintButton;
+    private HintButton _hintButton;
 
-    public AdController(Board board, MessagePanel messagePanel, Button hintButton)
+    public AdController(Board board, MessagePanel messagePanel, HintButton hintButton)
     {
         _board = board;
         _messagePanel = messagePanel;
@@ -18,7 +17,7 @@ public class AdController : IInitializable, IDisposable
 
     public void Initialize()
     {
-        _hintButton.onClick.AddListener(ShowRewAd);
+        _hintButton.Setup(ShowRewAd);
         _board.OnNewGameStarted += NewGameStartedHandler;
     }
 
@@ -42,13 +41,13 @@ public class AdController : IInitializable, IDisposable
                 }
             }
 
-            _hintButton.interactable = false;
+            _hintButton.Disable();
         });
     }
 
     private void NewGameStartedHandler()
     {
-        _hintButton.interactable = true;
+        _hintButton.Enable();
         YG2.InterstitialAdvShow();
     }
 }

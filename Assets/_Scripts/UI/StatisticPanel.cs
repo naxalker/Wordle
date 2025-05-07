@@ -26,7 +26,7 @@ public class StatisticPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerStatistic.OnTotalTimeValueChanged += TotalTimeValueChangedHandler;   
+        _playerStatistic.OnTotalTimeValueChanged += TotalTimeValueChangedHandler;
     }
 
     private void Start()
@@ -54,7 +54,7 @@ public class StatisticPanel : MonoBehaviour
         {
             _totalWinsPercentageText.text = "";
         }
-        
+
         _currentWinStreakText.text = _playerStatistic.CurrentWinStreak.ToString();
         _bestWinStreakText.text = _playerStatistic.BestWinStreak.ToString();
 
@@ -91,10 +91,14 @@ public class StatisticPanel : MonoBehaviour
 
     private string GetFormattedTime(float time)
     {
-        int minutes = Mathf.FloorToInt(time / 60);
+        int hours = Mathf.FloorToInt(time / 3600);
+        int minutes = Mathf.FloorToInt(time % 3600 / 60);
         int seconds = Mathf.FloorToInt(time % 60);
 
-        return $"{minutes:00}:{seconds:00}";
+        if (hours > 0)
+            return $"{hours:00}:{minutes:00}:{seconds:00}";
+        else
+            return $"{minutes:00}:{seconds:00}";
     }
 
     private string GetPlayedGamesText(int totalGames)
@@ -103,20 +107,20 @@ public class StatisticPanel : MonoBehaviour
 
         if (totalGames % 100 >= 11 && totalGames % 100 <= 19)
         {
-            gameWord = "Ë„";
+            gameWord = "–∏–≥—Ä";
         }
         else
         {
             int lastDigit = totalGames % 10;
 
             if (lastDigit == 1)
-                gameWord = "Ë„Û";
+                gameWord = "–∏–≥—Ä—É";
             else if (lastDigit >= 2 && lastDigit <= 4)
-                gameWord = "Ë„˚";
+                gameWord = "–∏–≥—Ä—ã";
             else
-                gameWord = "Ë„";
+                gameWord = "–∏–≥—Ä";
         }
 
-        return $"“˚ Ò˚„‡Î ÛÊÂ - <b>{totalGames} {gameWord}</b>";
+        return $"–¢—ã —Å—ã–≥—Ä–∞–ª —É–∂–µ - <b>{totalGames} {gameWord}</b>";
     }
 }
